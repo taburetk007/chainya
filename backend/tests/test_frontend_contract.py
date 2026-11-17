@@ -280,6 +280,14 @@ def test_form_errors_are_associated_with_the_fields_they_describe():
     assert 'id="register-privacy" type="checkbox" required aria-describedby="register-status"' in ACCOUNT_SOURCE
 
 
+def test_closing_product_sheet_keeps_selected_catalog_category():
+    # Закрытие карточки делает history.back() → popstate → go(view, false).
+    # Категория должна сбрасываться только при явном переходе или смене раздела.
+    assert "if (updateHistory || changingRoute) curFilter = catalogGroup;" in SOURCE
+    go_body = SOURCE.split("function go(view, updateHistory=true){", 1)[1].split("\n  }\n", 1)[0]
+    assert "\n      curFilter = catalogGroup;" not in go_body
+
+
 def test_product_sheet_restores_focus_after_history_navigation():
     assert "pendingHistoryFocus = null" in SOURCE
     assert "if (returningViaHistory) pendingHistoryFocus = focusTarget" in SOURCE

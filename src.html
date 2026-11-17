@@ -2773,7 +2773,9 @@ select.input{
     if (CATALOG_VIEWS.has(view)){
       if (changingRoute){ curSearch = ''; curSort = 'default'; }
       catalogGroup = view === 'teaware' ? 'teaware' : 'tea';
-      curFilter = catalogGroup;
+      // Возврат по истории (закрытие карточки, «Назад») оставляет выбранную
+      // категорию; явный переход по меню или в другой раздел сбрасывает её.
+      if (updateHistory || changingRoute) curFilter = catalogGroup;
       const heading = $('#shop-heading');
       heading.dataset.i18n = view === 'teaware' ? 'teaware_heading' : 'shop_heading';
       heading.textContent = T()[heading.dataset.i18n];
